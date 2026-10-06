@@ -1,0 +1,58 @@
+---
+- name: Nginx Handler Demo
+  hosts: all
+  become: true
+
+  tasks:
+
+    - name: Install Nginx
+      ansible.builtin.apt:
+        name: nginx
+        state: present
+        update_cache: yes
+
+    - name: Configure Nginx
+      ansible.builtin.copy:
+        dest: /etc/nginx/nginx.conf
+        owner: root
+        group: root
+        mode: '0644'
+        content: |
+          user www-data;
+          worker_processes auto;
+          pid /run/nginx.pid;
+
+          events {
+              worker_connections 768;
+          }
+
+          http {
+              include /etc/nginx/mime.types;
+              default_type application/octet-stream;
+
+              sendfile on;
+              keepalive_timeout 65;
+
+              server {
+                  listen 80;
+                  server_name _;
+
+                  location / {
+                      return 200 "Hello Kaycee, the Nginx config changed!\n";
+                  }
+              }
+          }
+      notify: Restart Nginx
+
+    - name: Make sure Nginx is running
+      ansible.builtin.service:
+        name: nginx
+        state: started
+        enabled: yes
+
+  handlers:
+
+    - name: Restart Nginx
+      ansible.builtin.service:
+        name: nginx
+        state: restarted

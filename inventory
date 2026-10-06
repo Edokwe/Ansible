@@ -1,0 +1,22 @@
+[all:vars]
+ansible_python_interpreter=/usr/bin/python3.14
+ansible_ssh_private_key_file=~/.ssh/ansible-key.pem
+ansible_ssh_common_args='-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'
+
+
+[servers]
+3.85.184.205
+34.226.190.140
+54.196.171.24
+
+
+
+[servers:vars]
+ansible_user=ubuntu
+
+#[amazon]
+#54.167.81.62
+
+#[amazon:vars]
+#ansible_user=ec2-user
+

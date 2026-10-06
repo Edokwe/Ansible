@@ -1,0 +1,23 @@
+
+
+---
+- name: Install packages
+  hosts: all
+  become: true
+  vars:
+    app_user: deploy
+  tasks:
+    - name: Create the app user
+      ansible.builtin.user:
+        name: "{{ app_user }}"
+        state: present
+
+    - name: Install Git, curl, and htop
+      ansible.builtin.apt:
+        name:
+          - git
+          - curl
+          - htop
+        state: present
+        update_cache: true
+      when: ansible_facts["distribution"] == "Ubuntu"

@@ -1,0 +1,4 @@
+.venv/
+.pipx/
+.tools/
+.uv-cache/
